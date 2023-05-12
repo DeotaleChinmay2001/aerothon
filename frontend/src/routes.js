@@ -23,6 +23,7 @@ import Icons from "views/Icons.js";
 import Maps from "views/Maps.js";
 import Notifications from "views/Notifications.js";
 import Upgrade from "views/Upgrade.js";
+import Logout from "components/Logout/Logout";
 
 const dashboardRoutes = [
 
@@ -50,7 +51,22 @@ const dashboardRoutes = [
     icon: "nc-icon nc-chart",
     component: Notifications,
     layout: "/admin"
-  }
+  },
+
+  {
+    path: "/logout",
+    name: "Logout",
+    icon: "nc-icon nc-circle-09",
+    component: Logout,
+    layout: "/admin"
+  },
+  {
+    path: "/",
+    name: "Start",
+    icon: "nc-icon nc-char-pie",
+    component: Dashboard,
+    layout: "/admin"
+  },
 ];
 
 export default dashboardRoutes;

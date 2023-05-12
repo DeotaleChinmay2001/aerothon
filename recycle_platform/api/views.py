@@ -17,6 +17,7 @@ class LoginAPIView(APIView):
         company_role = request.data.get('companyrole')
         company_name = request.data.get('companyname')
         password = request.data.get('password')
+        print('data : ' + str(request))
 
         # Query the UserDetails model to get the user with the given credentials
         user_details = UserDetails.objects.filter(company_type=company_role, company_name=company_name, password=password).first()

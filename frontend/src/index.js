@@ -11,14 +11,21 @@ import "./assets/css/demo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import AdminLayout from "layouts/Admin.js";
+import Login from "components/Login/Login";
+import LoginCheck from "components/LoginCheck";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <BrowserRouter>
     <Switch>
-      <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-      <Redirect from="/" to="/admin/dashboard" />
+      <Route path="/admin">
+        <LoginCheck cmp={AdminLayout} />
+      </Route>
+      <Route path="/login" exact component={Login} />
+      <Route path="/" exact>
+        <LoginCheck cmp={AdminLayout} />
+      </Route>
     </Switch>
   </BrowserRouter>
 );
