@@ -23,7 +23,7 @@ Develop a platform or solution that connects aircraft manufacturers, airlines, a
 
 
 ## Proposed Solution
-We have developed a platform which uses Reactjs for Frontend and Django for backend. The platfrom has 3 types of login that is for
+We have developed a platform which uses Reactjs for Frontend and Django for backend.
 -	Aircraft Manufacturers
 -	Airline
 -	Recycling facilities.
