@@ -45,13 +45,13 @@ const dashboardRoutes = [
 
   
   
-  {
-    path: "/notifications",
-    name: "Analysis",
-    icon: "nc-icon nc-chart",
-    component: Notifications,
-    layout: "/admin"
-  },
+  // {
+  //   path: "/notifications",
+  //   name: "Analysis",
+  //   icon: "nc-icon nc-chart",
+  //   component: Notifications,
+  //   layout: "/admin"
+  // },
 
   {
     path: "/logout",

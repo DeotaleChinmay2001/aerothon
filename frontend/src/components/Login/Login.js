@@ -76,9 +76,9 @@ const Login = () => {
     })
       .then((res) => {
         console.log(res);
-        localStorage.setItem("token", JSON.stringify(res.data.token));
-        localStorage.setItem("companyrole", JSON.stringify(selectedSector));
-        localStorage.setItem("companyname", JSON.stringify(selectedSectorCompany));
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("companyrole", selectedSector);
+        localStorage.setItem("companyname", selectedSectorCompany);
         setNavigate(true);
        })
       .catch((err) => { 
