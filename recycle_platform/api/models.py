@@ -37,7 +37,7 @@ class AircraftPartData(models.Model):
     landfill_waste_saved = models.FloatField()
     energy_consumption_saved = models.FloatField()
     toxicity_score_difference = models.FloatField()
-    remanufacturing_potential_percent = models.FloatField()
+    remanufacturing_potential_percent = models.FloatField(default= 1.0)
     life_cycle_assessment_score = models.FloatField()
     status = models.CharField(max_length=100, default='InUse')
 

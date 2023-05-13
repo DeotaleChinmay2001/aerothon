@@ -31,6 +31,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_HEADERS = (
+    "accept",
+    "token",
+    "content-type",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+)
 
 INSTALLED_APPS = [
     "django.contrib.admin",

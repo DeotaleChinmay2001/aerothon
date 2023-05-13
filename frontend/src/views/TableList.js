@@ -13,7 +13,7 @@ function TableList() {
     setOpen(false);
   };
 
-  const handleOpen = (item) => {
+  const statusChange = (item) => {
 
     let strigifyData = JSON.stringify({
       id: item.id,
@@ -33,7 +33,10 @@ function TableList() {
     })
       .then((res) => {
         let temp = res.data
-        let result = temp.filter((item) => (item.manufacturer === 'Airbus' && item.remanufacturing_potential_percent > 49) || (localStorage.getItem('companyrole') == "Recycler")).map((option) => 
+        let result = temp.filter((item) => (item.manufacturer === localStorage.getItem('companyname') && item.remanufacturing_potential_percent > 49) || 
+        (localStorage.getItem('companyrole') == "Airline") ||
+        (localStorage.getItem('companyrole') == "Recycler")
+      ).map((option) => 
           ({"Material Composition": option.material_composition,
             "Part Name": option.part_name,
             "Condition": option.condition,
@@ -44,6 +47,7 @@ function TableList() {
             "Remanufacturing Potential (%)": option.remanufacturing_potential_percent,
             "id": option.id
           }));
+          console.log('status updated: ' + result)
           setDbData(result)
        })
       .catch((err) => { 
@@ -75,7 +79,10 @@ function TableList() {
     })
       .then((res) => {
         let temp = res.data
-        let result = temp.filter((item) => (item.manufacturer === 'Airbus' && item.remanufacturing_potential_percent > 49) || (localStorage.getItem('companyrole') == "Recycler")).map((option) => 
+        let result = temp.filter((item) => (item.manufacturer === localStorage.getItem('companyname') && item.remanufacturing_potential_percent > 49) || 
+            (localStorage.getItem('companyrole') == "Airline") ||
+            (localStorage.getItem('companyrole') == "Recycler")
+          ).map((option) => 
           ({"Material Composition": option.material_composition,
             "Part Name": option.part_name,
             "Condition": option.condition,
@@ -86,6 +93,7 @@ function TableList() {
             "Remanufacturing Potential (%)": option.remanufacturing_potential_percent,
             "id": option.id
           }));
+          console.log("GetData: " + result);
           setDbData(result)
        })
       .catch((err) => { 
@@ -98,7 +106,7 @@ function TableList() {
     dbData.map((item) => ({
         ...item,
         button: (
-          <Button onClick={(e) => handleOpen(item)} variant="contained">
+          <Button onClick={(e) => statusChange(item)} variant="contained">
             {localStorage.getItem('companyname') == "Recycler" ? "RECYCLE" : "Add FOR RECYCLE"}
           </Button>
         ),

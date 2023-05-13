@@ -40,18 +40,24 @@ class RecyclerDataView(APIView):
     def get(self, request):
         token = request.headers.get('token')
         try :
+            print("RecyclerDataView token: " + str(token))
             payload = jwt.decode(jwt=token, key=settings.SECRET_KEY, algorithms=['HS256'])
+            print("RecyclerDataView payload: " + str(payload))
 
             user = UserDetails.objects.get(pk=payload.get('user_id'))
+            print("RecyclerDataView user: " + str(user))
+            
             company_name = user.company_name.replace(" ", "")
             company_type = user.company_type.replace(" ", "")
 
             if company_type != "Recycler" :
                 return Response({'error': 'Access Denied!!' }, status=status.HTTP_400_BAD_REQUEST)
-        
-            aircraftPartDatas = AircraftPartData.objects.filter(status = "Recycling")
-            serialized = AircraftPartDataSerializer(aircraftPartDatas, many=True)
+            
+            print("RecyclerDataView End: " + str(company_name))
+            serialized = AircraftPartDataSerializer(AircraftPartData.objects.all().order_by('remanufacturing_potential_percent')[:200], many=True)
+            print("RecyclerDataView End: " + str(serialized.data))
             return Response(serialized.data, status= status.HTTP_200_OK)
+        
         except jwt.ExpiredSignatureError as e :
             return Response({'error': 'Activations link expired'}, status=status.HTTP_400_BAD_REQUEST)
         except jwt.exceptions.DecodeError as e :
@@ -75,9 +81,12 @@ class RecyclerDataView(APIView):
                 part = AircraftPartData.objects.filter(pk=part_id, status="Recycling")
                 if status_type in ['Removed']:
                     part.status = status_type
-                part.save()
-                serialized = AircraftPartDataSerializer(AircraftPartData.objects.filter(status="Recycling"), many = True)
-                return Response(serialized.data, status= status.HTTP_200_OK)
+                serialized = AircraftPartDataSerializer(data = part, many=True)
+                if serialized.is_valid() : 
+                    serialized.save()
+                    print("Status Has been changed")
+                resp = AircraftPartDataSerializer(AircraftPartData.objects.filter(status='Recycling'), many=True)
+                return Response(resp.data, status= status.HTTP_200_OK)
             except :
                 return Response({'message': 'Part not found or is not in use.'}, status=status.HTTP_404_NOT_FOUND)
         
@@ -91,6 +100,7 @@ class PartDataView(APIView):
     def post(self, request):
         token = request.headers.get('token')
         try :
+            print("PartDataView token: " + str(token))
             payload = jwt.decode(jwt=token, key=settings.SECRET_KEY, algorithms=['HS256'])
             user = UserDetails.objects.get(pk=payload.get('user_id'))
             company_name = user.company_name.replace(" ", "")
@@ -101,19 +111,20 @@ class PartDataView(APIView):
         
             part_id = request.data.get('id')
             status_type = request.data.get('status_type') # 'recycling' or 'repurposing'
-            print("part: " + str(part_id))
             try:
                 part = AircraftPartData.objects.get(pk=part_id, status="InUse")
-                # Update the status of the selected part
-                if status_type in ['Recycling']:
+                if status_type =='Recycling':
                     part.status = status_type
-                part.save()
+                serialized = AircraftPartDataSerializer(data = part, many = True)
+                if serialized.is_valid() : 
+                    serialized.save()
+                    print("Status Has been changed")
                 if company_type == "Manufacturer" :
-                    serialized = AircraftPartDataSerializer(AircraftPartData.objects.filter( status = "InUse", manufacturer = company_name  ), many = True)
-                    return Response(serialized.data, status= status.HTTP_200_OK)
+                    resp = AircraftPartDataSerializer(AircraftPartData.objects.filter( status = "InUse", manufacturer=company_name), many = True)
+                    return Response(resp.data, status= status.HTTP_200_OK)
                 else : 
-                    serialized = AircraftPartDataSerializer(AircraftPartData.objects.filter( status = "InUse"), many = True)
-                    return Response(serialized.data, status= status.HTTP_200_OK)
+                    resp = AircraftPartDataSerializer(AircraftPartData.objects.filter( status = "InUse"), many = True)
+                    return Response(resp.data, status= status.HTTP_200_OK)
             
             except :
                 return Response({'message': 'Part not found or is not in use.'}, status=status.HTTP_404_NOT_FOUND)
@@ -130,11 +141,14 @@ class PartDataView(APIView):
     def get(self, request):
         token = request.headers.get('token')
         try :
+            print("PartDataView get token: " + str(token))
             payload = jwt.decode(jwt=token, key=settings.SECRET_KEY, algorithms=['HS256'])
+            print("PartDataView get payload: " + str(payload))
 
             user = UserDetails.objects.get(pk=payload.get('user_id'))
             company_name = user.company_name.replace(" ", "")
             company_type = user.company_type.replace(" ", "")
+            print("PartDataView get user: " + str(user))
             
             if company_type == "Recycler" :
                 return Response({'error': 'Access Denied!!' }, status=status.HTTP_400_BAD_REQUEST)
@@ -146,6 +160,7 @@ class PartDataView(APIView):
             else : 
                 aircraftPartDatas = AircraftPartData.objects.filter(status="InUse")
                 serialized = AircraftPartDataSerializer(aircraftPartDatas, many=True)
+                print("PartDataView get resp 2: " + str(serialized.data))
                 return Response(serialized.data, status= status.HTTP_200_OK)
         except jwt.ExpiredSignatureError as e :
             return Response({'error': 'Activations link expired'}, status=status.HTTP_400_BAD_REQUEST)
