@@ -7,7 +7,7 @@ import axios from "axios";
 function TableList() {
   const [open, setOpen] = React.useState(false);
   const [dbData, setDbData] = React.useState([]);
-  const [currData, setCurrData] = React.useState({});
+  const [currIdx, setCurrIdx] = React.useState(0);
 
   const handleClose = () => {
     setOpen(false);
@@ -58,11 +58,22 @@ function TableList() {
     getData();
   }, []);
 
+  const IncIdx = () => {
+    if( (currIdx + 1) * 20 >= 10000) return;
+    setCurrIdx(currIdx + 1);
+    getData();
+  }
+
+  const DecIdx = () => {
+    if( (currIdx - 1) * 20 < 0) return;
+    setCurrIdx(currIdx - 1);
+    getData();
+  }
+
   const getData = () => {
 
     let strigifyData = JSON.stringify({
-      id: "",
-      status_type: "",
+      row_number: currIdx
     });
   
     const endpoint = localStorage.getItem('companyname') == "Recycler" ? "/recylersData/" : "/updateStatus/";
@@ -155,6 +166,10 @@ function TableList() {
           <Button>SEND</Button>
         </DialogActions>
       </Dialog>
+      <div style={{width: "100%", height: "20%", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+        <Button onClick={DecIdx}>Prev</Button>
+        <Button onClick={IncIdx}>Next</Button>
+      </div>
       <TableContainer component={Paper} style={{ maxHeight: 550 }}>
         <Table stickyHeader {...getTableProps()}>
           <TableHead>

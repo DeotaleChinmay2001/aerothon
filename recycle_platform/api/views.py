@@ -10,24 +10,24 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from rest_framework.parsers import JSONParser
 from .serializers import UserDetailsSerializer, AircraftPartDataSerializer
+import hashlib
 
 
 class LoginAPIView(APIView):
     def post(self, request):    
         company_role = request.data.get('companyrole')
         company_name = request.data.get('companyname')
-        password = request.data.get('password')
+        
+        password = request.data.get('password') 
         print('data : ' + str(request))
-
-        # Query the UserDetails model to get the user with the given credentials
-        user_details = UserDetails.objects.filter(company_type=company_role, company_name=company_name, password=password).first()
-        print(user_details)
-        if not user_details:
+        
+        user = UserDetails.objects.get(company_type=company_role, company_name=company_name)
+        if hashlib.sha256(user.password.encode()).hexdigest() ==password:
+            token = jwt.encode({'user_id': user.pk}, settings.SECRET_KEY, algorithm='HS256')
+            return Response({'token': token}, status=status.HTTP_200_OK)
+            
+        else :
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-
-        # If the user credentials are valid, generate a token and return it as a response
-        token = jwt.encode({'user_id': user_details.pk}, settings.SECRET_KEY, algorithm='HS256')
-        return Response({'token': token}, status=status.HTTP_200_OK)
 
 
 
@@ -143,22 +143,26 @@ class PartDataView(APIView):
         try :
             print("PartDataView get token: " + str(token))
             payload = jwt.decode(jwt=token, key=settings.SECRET_KEY, algorithms=['HS256'])
-            print("PartDataView get payload: " + str(payload))
+            # print("PartDataView get payload: " + str(request.data.get('get_row_number')))
 
             user = UserDetails.objects.get(pk=payload.get('user_id'))
+            # row_number = request.data.get('row_number')
+            # if row_number == None :
+            #     return Response({'error': 'Invalid row Number!!' }, status=status.HTTP_400_BAD_REQUEST)
+            # row_number = row_number * 20
             company_name = user.company_name.replace(" ", "")
             company_type = user.company_type.replace(" ", "")
-            print("PartDataView get user: " + str(user))
+            # print("PartDataView get user: " + str(row_number))
             
             if company_type == "Recycler" :
                 return Response({'error': 'Access Denied!!' }, status=status.HTTP_400_BAD_REQUEST)
         
             if company_type == "Manufacturer" :
-                aircraftPartDatas = AircraftPartData.objects.filter(status="InUse", manufacturer=company_name)
+                aircraftPartDatas = AircraftPartData.objects.filter(status="InUse", manufacturer=company_name)#[row_number : row_number + 12]
                 serialized = AircraftPartDataSerializer(aircraftPartDatas, many=True)
                 return Response(serialized.data, status= status.HTTP_200_OK)
             else : 
-                aircraftPartDatas = AircraftPartData.objects.filter(status="InUse")
+                aircraftPartDatas = AircraftPartData.objects.filter(status="InUse")#[row_number : row_number + 20]
                 serialized = AircraftPartDataSerializer(aircraftPartDatas, many=True)
                 print("PartDataView get resp 2: " + str(serialized.data))
                 return Response(serialized.data, status= status.HTTP_200_OK)

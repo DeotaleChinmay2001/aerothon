@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'; // import Bootstrap CSS
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap'; // import Bootstrap components
 import axios from "axios"
 import { Redirect } from "react-router-dom";
+var sha256 = require('js-sha256');
 
 const Login = () => {
   const [selectedSector, setSelectedSector] = useState('Manufacturer');
@@ -62,7 +63,7 @@ const Login = () => {
     let strigifyData = JSON.stringify({
       companyrole: selectedSector,
       companyname: selectedSectorCompany,
-      password: password
+      password: sha256(password).toString()
     });
     console.log(strigifyData)
     setIsLoading(true);
