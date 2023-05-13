@@ -12,6 +12,7 @@
 
 - [Problem Statement](#problem-statement)
 - [Proposed Solution](#proposed-solution)
+- [Technologies Used](#technologies-used)
 - [About The Application](#about-the-application)
 - [Usage](#usage)
 - [Contributors](#contributors)
@@ -31,7 +32,10 @@ We have developed a platform which uses Reactjs for Frontend and Django for back
 We have also developed a dashboard which allows 
 On login they also 
 
-
+## Technologies used
+- Frontend: React
+- Backend: Django
+- Database: Sqlite
 
 ### About The Application
 
