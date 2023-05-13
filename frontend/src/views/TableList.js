@@ -47,7 +47,6 @@ function TableList() {
             "Remanufacturing Potential (%)": option.remanufacturing_potential_percent,
             "id": option.id
           }));
-          console.log('status updated: ' + result)
           setDbData(result)
        })
       .catch((err) => { 
@@ -93,7 +92,6 @@ function TableList() {
             "Remanufacturing Potential (%)": option.remanufacturing_potential_percent,
             "id": option.id
           }));
-          console.log("GetData: " + result);
           setDbData(result)
        })
       .catch((err) => { 
