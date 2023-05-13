@@ -35,7 +35,7 @@ const remnu=avgValues["Remanufacturing Potential (%)"]
 console.log(avgValues);
 
 //filter
-const filteredData = airData.filter((item) => item.Manufacturer === localStorage.getItem('companyname'));
+const filteredData = airData.filter((item) => item.Manufacturer === (localStorage.getItem('companyrole') == 'Manufacture' ? localStorage.getItem('companyname') : "Airbus"));
 const labels = [...new Set(filteredData.map((item) => item['Part Name']))];
 console.log("testing" + filteredData)
 
@@ -45,7 +45,7 @@ const series = [
   filteredData.slice(0, 5).map((item) => item['Recycled Parts Carbon Footprint (kg CO2e)']),
 ];
 //filter
-const filteredData1 = airData.filter((item) => item.Manufacturer === localStorage.getItem('companyname'));
+const filteredData1 = airData.filter((item) => item.Manufacturer === (localStorage.getItem('companyrole') == 'Manufacture' ? localStorage.getItem('companyname') : "Airbus"));
 console.log("filterData1: " + filteredData1);
 const totalParts = filteredData1.length;
 
