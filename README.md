@@ -23,17 +23,51 @@ Develop a platform or solution that connects aircraft manufacturers, airlines, a
 
 
 ## Proposed Solution
+We have developed a platform which uses Reactjs for Frontend and Django for backend. The platfrom has 3 types of login that is for
+-	Aircraft Manufacturers
+-	Airline
+-	Recycling facilities.
+<br>
+We have also developed a dashboard which allows 
+On login they also 
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Integer feugiat scelerisque varius morbi enim. Mi tempus imperdiet nulla malesuada pellentesque. Turpis nunc eget lorem dolor. Magna ac placerat vestibulum lectus mauris. Enim eu turpis egestas pretium. Nunc non blandit massa enim nec. Urna nunc id cursus metus aliquam eleifend mi. Amet massa vitae tortor condimentum lacinia quis. Elit at imperdiet dui accumsan sit amet nulla.
+
 
 ### About The Application
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Integer feugiat scelerisque varius morbi enim. Mi tempus imperdiet nulla malesuada pellentesque. Turpis nunc eget lorem dolor. Magna ac placerat vestibulum lectus mauris. Enim eu turpis egestas pretium. Nunc non blandit massa enim nec. Urna nunc id cursus metus aliquam eleifend mi. Amet massa vitae tortor condimentum lacinia quis. Elit at imperdiet dui accumsan sit amet nulla. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Integer feugiat scelerisque varius morbi enim. Mi tempus imperdiet nulla malesuada pellentesque. Turpis nunc eget lorem dolor. Magna ac placerat vestibulum lectus mauris. Enim eu turpis egestas pretium. Nunc non blandit massa enim nec. Urna nunc id cursus metus aliquam eleifend mi. Amet massa vitae tortor condimentum lacinia quis. Elit at imperdiet dui accumsan sit amet nulla.
+ Summary of each API endpoint:
+
+1. LoginAPIView:
+- Accepts a POST request with company role, company name, and password as input
+- Queries the UserDetails model to check if the given credentials are valid
+- If the credentials are valid, generates a JWT token and returns it in the response
+
+3. RecyclerDataView:
+- Accepts a GET request with a valid JWT token in the headers
+- Verifies the token and checks if the user is a Recycler
+- If the user is a Recycler, returns the serialized data of AircraftPartData objects that have status 'Recycling'
+- Accepts a POST request with a valid JWT token in the headers and part_id, and status_type in the request body
+- Verifies the token and checks if the user is a Recycler
+- If the user is a Recycler, updates the status of the AircraftPartData object with the given part_id to the given status_type and returns the serialized data of AircraftPartData objects that have status 'Recycling'
+
+4. PartDataView:
+- Accepts a POST request with a valid JWT token in the headers and part_id and status_type in the request body
+- Verifies the token and checks if the user is either an Airline or a Manufacturer
+- If the user is a Manufacturer, returns the serialized data of AircraftPartData objects that have status 'InUse' and belong to the same manufacturer as the user
+- If the user is an Airline, returns the serialized data of AircraftPartData objects that have status 'InUse'
+- Updates the status of the AircraftPartData object with the given part_id to the given status_type and returns the serialized data of AircraftPartData objects that have status 'InUse'
 
 
 ## Usage
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Integer feugiat scelerisque varius morbi enim. Mi tempus imperdiet nulla malesuada pellentesque. Turpis nunc eget lorem dolor. Magna ac placerat vestibulum lectus mauris. Enim eu turpis egestas pretium. Nunc non blandit massa enim nec. Urna nunc id cursus metus aliquam eleifend mi. Amet massa vitae tortor condimentum lacinia quis. Elit at imperdiet dui accumsan sit amet nulla.
+Install project dependencies: 
+- Open a terminal window and navigate to the project directory. Run the command "npm install" to install the necessary Node.js packages, and "pip install -r requirements.txt" to install the necessary Python packages.
+
+- Set up the Django backend: Navigate to the "backend" directory in your project and run the command "python manage.py migrate" to create the necessary database tables. Then, run the command "python manage.py runserver" to start the Django development server.
+
+- Set up the React frontend: Navigate to the "frontend" directory in your project and run the command "npm start" to start the React development server.
+
+- Access the project in a web browser: Open a web browser and go to the URL "http://localhost:3000" to view the React frontend. You can interact with the frontend to make requests to the Django backend.
 
 ## Contributors
 
