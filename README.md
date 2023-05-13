@@ -29,8 +29,9 @@ We have developed a platform which uses Reactjs for Frontend and Django for back
 -	Airline
 -	Recycling facilities.
 <br>
-We have also developed a dashboard which allows 
-On login they also 
+We have also developed a dashboard which shows Recycled parts Carbon Footprint, Water Usage- Recycled Parts, Landfill Waste- Recycled Parts and Remanufacturing Potential %
+
+On login the Airlines, and Manufacturers can see a table with all of their Part Name, Material, Remanufacturing Potential and have an option to send that Part for Recycle.
 
 ## Technologies used
 - Frontend: React
